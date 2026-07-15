@@ -28,12 +28,12 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/Oryss/php-int-rangesets"
+      "url": "https://github.com/celtra/php-int-rangesets"
     }
   ],
   "require": {
-    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
-    "nikic/php-parser": "^4.10 || ^5",
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+    "nikic/php-parser": "^5",
     "remorhaz/int-rangesets": "dev-master"
   },
   "require-dev": {

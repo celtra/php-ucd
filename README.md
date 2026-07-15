@@ -14,7 +14,7 @@ For now, this library provides only access to Unicode property ranges.
 The version of UCD used is 15.1.0.
 
 ## Requirements
-- PHP 8.1, 8.2, 8.3, 8.4.
+- PHP 8.1, 8.2, 8.3, 8.4, 8.5.
 
 ## License
 This library is licensed under [MIT license](./LICENSE).

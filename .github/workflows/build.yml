@@ -22,6 +22,7 @@ jobs:
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         dependencies:
           - lowest
           - highest
@@ -33,8 +34,6 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 10
 
       - name: Install PHIVE
         uses: szepeviktor/phive@v1
@@ -47,7 +46,7 @@ jobs:
         with:
           path: |
             ~/.phive
-            ${{ github.workspace }}/tools
+            ${{ github.workspace }}/tools/phar
           key: phive-${{ runner.os }}-${{ hashFiles('.phive/phars.xml') }}
           restore-keys: |
             phive-${{ runner.os }}-
@@ -71,7 +70,7 @@ jobs:
             ${{ runner.os }}-php-${{ matrix.php-version }}-${{ matrix.dependencies }}
 
       - name: Force HTTPS for php-int-rangesets only
-        run: git config --global url."https://github.com/Oryss/php-int-rangesets".insteadOf "git@github.com:Oryss/php-int-rangesets"
+        run: git config --global url."https://github.com/celtra/php-int-rangesets".insteadOf "git@github.com:celtra/php-int-rangesets"
 
       - name: Install lowest dependencies
         if: ${{ matrix.dependencies == 'lowest' && matrix.platform-reqs == 'use-platform-reqs' }}
@@ -88,6 +87,11 @@ jobs:
       - name: Install highest dependencies (ignore platform reqs)
         if: ${{ matrix.dependencies == 'highest' && matrix.platform-reqs == 'ignore-platform-reqs' }}
         run: composer update --no-interaction --prefer-dist --ignore-platform-reqs
+
+      # PHP 8.4 deprecates implicit nullable parameters, and psalm depends on many packages needing a higher version that fixes this.
+      - name: Install highest dependencies for psalm
+        working-directory: vendor-bin/psalm
+        run: composer update --no-interaction
 
       - name: Run tests
         run: composer test

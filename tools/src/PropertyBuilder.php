@@ -8,11 +8,11 @@ use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\DeclareDeclare;
+use PhpParser\Node\DeclareItem;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\PrettyPrinterAbstract;
 use ReflectionClass;
 use Remorhaz\IntRangeSets\Range;
@@ -222,7 +222,7 @@ final class PropertyBuilder
         $rangeSetClass = new ReflectionClass(RangeSet::class);
 
         $phpNodes = [];
-        $declare = new Declare_([new DeclareDeclare('strict_types', $this->phpBuilder->val(1))]);
+        $declare = new Declare_([new DeclareItem('strict_types', $this->phpBuilder->val(1))]);
         $declare->setDocComment(new Doc('/** @noinspection PhpUnhandledExceptionInspection */'));
         $phpNodes[] = $declare;
         $phpNodes[] = $this->phpBuilder->namespace(__NAMESPACE__ . '\\Properties')->getNode();
@@ -233,11 +233,11 @@ final class PropertyBuilder
             $rangeStart = $range->getStart();
             $rangeFinish = $range->getFinish();
             $phpRangeStart = $this->phpBuilder->val($rangeStart);
-            $phpRangeStart->setAttribute('kind', LNumber::KIND_HEX);
+            $phpRangeStart->setAttribute('kind', Int_::KIND_HEX);
             $phpRangeArgs = [new ArrayItem($phpRangeStart)];
             if ($rangeStart != $rangeFinish) {
                 $phpRangeFinish = $this->phpBuilder->val($rangeFinish);
-                $phpRangeFinish->setAttribute('kind', LNumber::KIND_HEX);
+                $phpRangeFinish->setAttribute('kind', Int_::KIND_HEX);
                 $phpRangeArgs[] = new ArrayItem($phpRangeFinish);
             }
             $phpRanges[] = new Array_($phpRangeArgs, ['kind' => Array_::KIND_SHORT]);
